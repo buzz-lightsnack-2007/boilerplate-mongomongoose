@@ -49,11 +49,21 @@ PersonManagement.create = class Create {
   }
 }
 
-const findEditThenSave = (personId, done) => {
-  const foodToAdd = "hamburger";
+class SamplePersonManagement {
+  static findEditThenSave = (personId, done) => {
+    const updateRecord = (ERR, DATA, done) => {
+      (ERR || !DATA) ? done(ERR, DATA) : null;
+  
+      DATA[`favoriteFoods`].push(`hamburger`);
+      DATA.save((ERR, DATA) => {
+        return (ERR) ? done(ERR) : done(null, DATA);
+      });
+    };
+    PersonManagement.find.primarykey(personId, (ERR, DATA) => {updateRecord(ERR, DATA, done)});
+  };
 
-  done(null /*, data*/);
-};
+}
+
 
 const findAndUpdate = (personName, done) => {
   const ageToSet = 20;
@@ -88,7 +98,7 @@ exports.createAndSavePerson = PersonManagement.create.one;
 exports.findPeopleByName = PersonManagement.find.name;
 exports.findOneByFood = PersonManagement.find.food;
 exports.findPersonById = PersonManagement.find.primarykey;
-exports.findEditThenSave = findEditThenSave;
+exports.findEditThenSave = SamplePersonManagement.findEditThenSave;
 exports.findAndUpdate = findAndUpdate;
 exports.createManyPeople = PersonManagement.create.multiple;
 exports.removeById = removeById;
