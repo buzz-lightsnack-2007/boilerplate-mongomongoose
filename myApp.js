@@ -15,6 +15,12 @@ class PersonManagement {
 }
 
 PersonManagement.find = class Find {
+  static primarykey (ID, done) {
+    Person.findById(ID, (ERR, DATA) => {
+      return (ERR) ? done(ERR) : done(null, DATA);
+    });
+  }
+
   static name (NAME, done) {
     Person.find({"name": NAME}, (ERR, DATA) => {
       return (ERR) ? done(ERR) : done(null, DATA);
@@ -42,10 +48,6 @@ PersonManagement.create = class Create {
     })
   }
 }
-
-const findPersonById = (personId, done) => {
-  done(null /*, data*/);
-};
 
 const findEditThenSave = (personId, done) => {
   const foodToAdd = "hamburger";
@@ -85,7 +87,7 @@ exports.PersonModel = Person;
 exports.createAndSavePerson = PersonManagement.create.one;
 exports.findPeopleByName = PersonManagement.find.name;
 exports.findOneByFood = PersonManagement.find.food;
-exports.findPersonById = findPersonById;
+exports.findPersonById = PersonManagement.find.primarykey;
 exports.findEditThenSave = findEditThenSave;
 exports.findAndUpdate = findAndUpdate;
 exports.createManyPeople = PersonManagement.create.multiple;
