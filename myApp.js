@@ -19,6 +19,12 @@ PersonManagement.find = class Find {
     Person.find({"name": NAME}, (ERR, DATA) => {
       return (ERR) ? done(ERR) : done(null, DATA);
     });
+  };
+  
+  static food (FOOD, done) {
+    Person.findOne({"favoriteFoods": FOOD}, (ERR, DATA) => {
+      return (ERR) ? done(ERR) : done(null, DATA);
+    });
   }
 }
 
@@ -36,14 +42,6 @@ PersonManagement.create = class Create {
     })
   }
 }
-
-const findPeopleByName = (personName, done) => {
-  done(null /*, data*/);
-};
-
-const findOneByFood = (food, done) => {
-  done(null /*, data*/);
-};
 
 const findPersonById = (personId, done) => {
   done(null /*, data*/);
@@ -86,7 +84,7 @@ const queryChain = (done) => {
 exports.PersonModel = Person;
 exports.createAndSavePerson = PersonManagement.create.one;
 exports.findPeopleByName = PersonManagement.find.name;
-exports.findOneByFood = findOneByFood;
+exports.findOneByFood = PersonManagement.find.food;
 exports.findPersonById = findPersonById;
 exports.findEditThenSave = findEditThenSave;
 exports.findAndUpdate = findAndUpdate;
