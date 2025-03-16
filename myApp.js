@@ -49,6 +49,12 @@ PersonManagement.create = class Create {
   }
 }
 
+PersonManagement.remove = class Remove {
+  static byID (ID, done) {
+    Person.findByIdAndRemove(ID, (ERR, DATA) => {return (ERR) ? done(ERR) : done(null, DATA);});
+  }
+}
+
 class SamplePersonManagement {
   static findEditThenSave = (personId, done) => {
     const updateRecord = (ERR, DATA, done) => {
@@ -69,10 +75,6 @@ class SamplePersonManagement {
     });
   };
 }
-
-const removeById = (personId, done) => {
-  done(null /*, data*/);
-};
 
 const removeManyPeople = (done) => {
   const nameToRemove = "Mary";
@@ -100,6 +102,6 @@ exports.findPersonById = PersonManagement.find.primarykey;
 exports.findEditThenSave = SamplePersonManagement.findEditThenSave;
 exports.findAndUpdate = SamplePersonManagement.findAndUpdate;
 exports.createManyPeople = PersonManagement.create.multiple;
-exports.removeById = removeById;
+exports.removeById = PersonManagement.remove.byID;
 exports.removeManyPeople = removeManyPeople;
 exports.queryChain = queryChain;
