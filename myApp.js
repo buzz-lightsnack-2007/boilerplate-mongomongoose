@@ -62,14 +62,13 @@ class SamplePersonManagement {
     PersonManagement.find.primarykey(personId, (ERR, DATA) => {updateRecord(ERR, DATA, done)});
   };
 
+  static findAndUpdate = (personName, done) => {
+    /*const ageToSet = 20;*/
+    Person.findOneAndUpdate({"name": personName}, {$set: {age: 20}}, { new: true }, (ERR, DATA) => {
+      return (ERR) ? done(ERR) : done(null, DATA);
+    });
+  };
 }
-
-
-const findAndUpdate = (personName, done) => {
-  const ageToSet = 20;
-
-  done(null /*, data*/);
-};
 
 const removeById = (personId, done) => {
   done(null /*, data*/);
@@ -99,7 +98,7 @@ exports.findPeopleByName = PersonManagement.find.name;
 exports.findOneByFood = PersonManagement.find.food;
 exports.findPersonById = PersonManagement.find.primarykey;
 exports.findEditThenSave = SamplePersonManagement.findEditThenSave;
-exports.findAndUpdate = findAndUpdate;
+exports.findAndUpdate = SamplePersonManagement.findAndUpdate;
 exports.createManyPeople = PersonManagement.create.multiple;
 exports.removeById = removeById;
 exports.removeManyPeople = removeManyPeople;
