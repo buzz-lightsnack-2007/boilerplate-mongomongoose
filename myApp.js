@@ -1,13 +1,31 @@
 require('dotenv').config();
 const Mongoose = require(`mongoose`);
 
-let Person;
 
 Mongoose.connect(`mongodb://localhost:27017/`, { useNewUrlParser: true, useUnifiedTopology: true });
+let personSchema = new Mongoose.Schema({
+  "name": {"type": String, "required": true}, 
+  "age": {"type": Number},
+  "favoriteFoods": {"type": [String]}
+});
+let Person = Mongoose.model(`Person`, personSchema);
+class PersonManagement {
+}
 
-const createAndSavePerson = (done) => {
-  done(null /*, data*/);
-};
+PersonManagement.create = class Create {
+  static one (done) {
+    let CREATED = new Person({"name": ".", "age": 0,"favoriteFoods": []});
+    CREATED.save((ERR, DATA) => {
+      return (ERR) ? done(ERR) : done(null, DATA);
+    });
+  };
+
+  static multiple(LIST_PEOPLE, done) {
+    Person.create(LIST_PEOPLE, (ERR, DATA) => {
+      return (ERR) ? done(ERR) : done(null, DATA);
+    })
+  }
+}
 
 const createManyPeople = (arrayOfPeople, done) => {
   done(null /*, data*/);
@@ -60,13 +78,13 @@ const queryChain = (done) => {
 //----- **DO NOT EDIT BELOW THIS LINE** ----------------------------------
 
 exports.PersonModel = Person;
-exports.createAndSavePerson = createAndSavePerson;
+exports.createAndSavePerson = PersonManagement.create.one;
 exports.findPeopleByName = findPeopleByName;
 exports.findOneByFood = findOneByFood;
 exports.findPersonById = findPersonById;
 exports.findEditThenSave = findEditThenSave;
 exports.findAndUpdate = findAndUpdate;
-exports.createManyPeople = createManyPeople;
+exports.createManyPeople = PersonManagement.create.multiple;
 exports.removeById = removeById;
 exports.removeManyPeople = removeManyPeople;
 exports.queryChain = queryChain;
