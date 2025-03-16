@@ -1,15 +1,25 @@
 require('dotenv').config();
 const Mongoose = require(`mongoose`);
 
-
 Mongoose.connect(`mongodb://localhost:27017/`, { useNewUrlParser: true, useUnifiedTopology: true });
+
 let personSchema = new Mongoose.Schema({
   "name": {"type": String, "required": true}, 
   "age": {"type": Number},
   "favoriteFoods": {"type": [String]}
 });
+
 let Person = Mongoose.model(`Person`, personSchema);
+
 class PersonManagement {
+}
+
+PersonManagement.find = class Find {
+  static name (NAME, done) {
+    Person.find({"name": NAME}, (ERR, DATA) => {
+      return (ERR) ? done(ERR) : done(null, DATA);
+    });
+  }
 }
 
 PersonManagement.create = class Create {
@@ -26,10 +36,6 @@ PersonManagement.create = class Create {
     })
   }
 }
-
-const createManyPeople = (arrayOfPeople, done) => {
-  done(null /*, data*/);
-};
 
 const findPeopleByName = (personName, done) => {
   done(null /*, data*/);
@@ -79,7 +85,7 @@ const queryChain = (done) => {
 
 exports.PersonModel = Person;
 exports.createAndSavePerson = PersonManagement.create.one;
-exports.findPeopleByName = findPeopleByName;
+exports.findPeopleByName = PersonManagement.find.name;
 exports.findOneByFood = findOneByFood;
 exports.findPersonById = findPersonById;
 exports.findEditThenSave = findEditThenSave;
